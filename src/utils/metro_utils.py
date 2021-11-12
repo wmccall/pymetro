@@ -1,17 +1,11 @@
 import random
 import math
 
-from src.consts.metro_consts import (
-    DEFAULT_MAP_WIDTH,
-    DEFAULT_MAP_HEIGHT,
-    DEFAULT_NUM_STATIONS,
-    DEFAULT_NUM_LINES,
-    TOP_LEFT_CORNER,
-    TOP_RIGHT_CORNER,
-    BOTTOM_LEFT_CORNER,
-    BOTTOM_RIGHT_CORNER,
-    VERTICAL_PIPE,
-    HORIZONTAL_PIPE,
+from src.utils.debug_utils import (
+    print_vector,
+    print_current_info,
+    print_station_details,
+    print_selected_station,
 )
 
 def generate_stations(map_width, map_height, num_stations):
@@ -88,22 +82,18 @@ def get_closest_station(current_location, stations, line, map_width, map_height,
     min_dist = math.sqrt(map_width**2 + map_height**2)
     selected_station = -1
     station_num = 0
-    print("######## Closest Station #########")
-    print(f"vector: {vector}, is_inverse: {is_inverse}, current_location: {current_location}, desired_location: {desired_location}")
-    print("##################################")
+    print_current_info(vector, is_inverse, current_location, desired_location)
     for station in stations:
         if station_num not in line:
             cur_dist = calculate_distance(current_location, station)
             desired_dist = calculate_distance(desired_location, station)
             dist_discrepancy = cur_dist - desired_dist
-            print(f"{station_num} - station: {station}, cur_dist: {cur_dist}, desired_dist: {desired_dist}, dist_discrepancy: {dist_discrepancy}")
+            print_station_details(station_num, station, cur_dist, desired_dist, dist_discrepancy)
             if dist_discrepancy > 0 and desired_dist < min_dist:
                 selected_station = station_num
                 min_dist = desired_dist
         station_num += 1
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    print(f"selected_station: {selected_station}")
-    print()
+    print_selected_station(selected_station)
     return selected_station
 
 
@@ -111,41 +101,6 @@ def calculate_distance(loc_1, loc_2):
     x_dist = loc_1['x'] - loc_2['x']
     y_dist = loc_1['y'] - loc_2['y']
     return math.sqrt(x_dist**2 + y_dist**2)
-
-def print_vector(vector):
-    horizontal_lines = "".join([HORIZONTAL_PIPE for _ in range(5)])
-    if vector["x_vec"] < 0 and vector["y_vec"] < 0:
-        print(f"{TOP_LEFT_CORNER}{horizontal_lines}{TOP_RIGHT_CORNER}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}{horizontal_lines}{VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE} x{VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}x {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
-    if vector["x_vec"] > 0 and vector["y_vec"] < 0:
-        print(f"{TOP_LEFT_CORNER}{horizontal_lines}{TOP_RIGHT_CORNER}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}{horizontal_lines}{VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}x {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE} x{VERTICAL_PIPE}")
-        print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
-    if vector["x_vec"] > 0 and vector["y_vec"] > 0:
-        print(f"{TOP_LEFT_CORNER}{horizontal_lines}{TOP_RIGHT_CORNER}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE} x{VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}x {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}{horizontal_lines}{VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
-    if vector["x_vec"] < 0 and vector["y_vec"] > 0:
-        print(f"{TOP_LEFT_CORNER}{horizontal_lines}{TOP_RIGHT_CORNER}")
-        print(f"{VERTICAL_PIPE}x {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE} x{VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}{horizontal_lines}{VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
-        print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
 
 # def get_destinations(location, vector, map_width, map_height):
 #     x = location['x']
