@@ -23,7 +23,7 @@ def generate_lines(map_width, map_height, stations, num_lines):
         line = []
         middle_location = generate_random_location(map_width, map_height)
         vector = generate_vector()
-        print_vector(vector)
+        # print_vector(vector)
         # while current_location['x'] not in (0, map_width) and current_location['y'] not in (0, map_height):
         current_location = middle_location
         while True:
@@ -82,18 +82,18 @@ def get_closest_station(current_location, stations, line, map_width, map_height,
     min_dist = math.sqrt(map_width**2 + map_height**2)
     selected_station = -1
     station_num = 0
-    print_current_info(vector, is_inverse, current_location, desired_location)
+    # print_current_info(vector, is_inverse, current_location, desired_location)
     for station in stations:
         if station_num not in line:
             cur_dist = calculate_distance(current_location, station)
             desired_dist = calculate_distance(desired_location, station)
             dist_discrepancy = cur_dist - desired_dist
-            print_station_details(station_num, station, cur_dist, desired_dist, dist_discrepancy)
+            # print_station_details(station_num, station, cur_dist, desired_dist, dist_discrepancy)
             if dist_discrepancy > 0 and desired_dist < min_dist:
                 selected_station = station_num
                 min_dist = desired_dist
         station_num += 1
-    print_selected_station(selected_station)
+    # print_selected_station(selected_station)
     return selected_station
 
 

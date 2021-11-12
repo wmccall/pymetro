@@ -19,5 +19,5 @@ if __name__ == "__main__":
     metro = PyMetro(args.width, args.height, args.stations, args.lines)
     metro.details()
     metro.generate()
-    metro.ascii_map()
+    # metro.ascii_map()
     metro.plot()
