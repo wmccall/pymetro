@@ -18,6 +18,7 @@ def generate_stations(map_width, map_height, num_stations):
 
 def generate_lines(map_width, map_height, stations, num_lines):
     lines = []
+    touched_stations = []
     connection_bends = {}
     for _ in range(num_lines):
         line = []
@@ -31,6 +32,7 @@ def generate_lines(map_width, map_height, stations, num_lines):
             if closest_station == -1:
                 break
             line.append(closest_station)
+            touched_stations.append(closest_station)
 
             if len(line) > 2:
                 prev_station = line[len(line)-2]
@@ -48,6 +50,7 @@ def generate_lines(map_width, map_height, stations, num_lines):
             if closest_station == -1:
                 break
             line.insert(0, closest_station)
+            touched_stations.append(closest_station)
             if len(line) > 2:
                 prev_station = line[1]
                 connection_str = f"{prev_station},{closest_station}"
@@ -58,7 +61,7 @@ def generate_lines(map_width, map_height, stations, num_lines):
                     connection_bends[connection_str_2] = bends
             current_location = stations[closest_station]
         lines.append({"start": middle_location, "line": line})
-    return {'lines': lines, 'connection_bends': connection_bends}
+    return {'lines': lines, 'connection_bends': connection_bends, 'touched_stations': touched_stations}
 
 
 def generate_vector():

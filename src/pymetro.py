@@ -62,11 +62,14 @@ class PyMetro:
     def plot(self):
         stations_x = []
         stations_y = []
+        station_num = 0
         for station in self.stations:
-            stations_x.append(station['x'])
-            stations_y.append(station['y'])
+            if station_num in self.tracks_info['touched_stations']:
+                stations_x.append(station['x'])
+                stations_y.append(station['y'])
+            station_num += 1
         colors = [[0,0,0]]
-        pyplot.scatter(stations_x, stations_y, c=colors, s=150)
+        pyplot.scatter(stations_x, stations_y, c=colors, s=30)
         offset = .04
         count = 0
         for line_info in self.tracks_info['lines']:
