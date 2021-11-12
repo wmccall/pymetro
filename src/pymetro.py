@@ -1,3 +1,5 @@
+from matplotlib import pyplot
+
 from src.consts.metro_consts import (
     DEFAULT_MAP_WIDTH,
     DEFAULT_MAP_HEIGHT,
@@ -34,19 +36,16 @@ class PyMetro:
 
     def generate(self):
         self.stations = generate_stations(self.map_width, self.map_height, self.num_stations)
-        self.track_info = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines)
+        self.tracks_info = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines)
 
     def ascii_map(self):
         map = [[" " for col_num in range(self.map_width)] for row_num in range(self.map_height)]
         station_num = 0
         print(self.stations)
-        print(self.track_info)
+        print(self.tracks_info)
         for station in self.stations:
             map[station['y']][station['x']] = f"{station_num}"
             station_num += 1
-        # for line in self.track_info['lines']:
-        #     l = line["start"]
-        #     map[l['y']][l['x']] = "X"
 
         map.reverse()
 
@@ -59,3 +58,25 @@ class PyMetro:
             print(slice)
         bottom_border = f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}"
         print(bottom_border)
+
+    def plot(self):
+        stations_x = []
+        stations_y = []
+        for station in self.stations:
+            stations_x.append(station['x'])
+            stations_y.append(station['y'])
+        colors = [[0,0,0]]
+        pyplot.scatter(stations_x, stations_y, c=colors, s=150)
+        offset = .04
+        count = 0
+        for line_info in self.tracks_info['lines']:
+            print(line_info)
+            line_x = []
+            line_y = []
+            for station_num in line_info['line']:
+                station_info = self.stations[station_num]
+                line_x.append(station_info['x']+(offset*count))
+                line_y.append(station_info['y']+(offset*count))
+            count += 1
+            pyplot.plot(line_x, line_y)
+        pyplot.show()

@@ -20,3 +20,4 @@ if __name__ == "__main__":
     metro.details()
     metro.generate()
     metro.ascii_map()
+    metro.plot()
