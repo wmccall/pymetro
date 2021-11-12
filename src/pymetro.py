@@ -34,19 +34,19 @@ class PyMetro:
 
     def generate(self):
         self.stations = generate_stations(self.map_width, self.map_height, self.num_stations)
-        self.lines = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines)
+        self.track_info = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines)
 
     def ascii_map(self):
         map = [[" " for col_num in range(self.map_width)] for row_num in range(self.map_height)]
         station_num = 0
         print(self.stations)
-        print(self.lines)
+        print(self.track_info)
         for station in self.stations:
             map[station['y']][station['x']] = f"{station_num}"
             station_num += 1
-        for line in self.lines:
-            l = line["start"]
-            map[l['y']][l['x']] = "X"
+        # for line in self.track_info['lines']:
+        #     l = line["start"]
+        #     map[l['y']][l['x']] = "X"
 
         map.reverse()
 

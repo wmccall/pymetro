@@ -24,6 +24,7 @@ def generate_stations(map_width, map_height, num_stations):
 
 def generate_lines(map_width, map_height, stations, num_lines):
     lines = []
+    connection_bends = {}
     for _ in range(num_lines):
         line = []
         middle_location = generate_random_location(map_width, map_height)
@@ -36,17 +37,34 @@ def generate_lines(map_width, map_height, stations, num_lines):
             if closest_station == -1:
                 break
             line.append(closest_station)
+
+            if len(line) > 2:
+                prev_station = line[len(line)-2]
+                connection_str = f"{prev_station},{closest_station}"
+                connection_str_2 = f"{closest_station},{prev_station}"
+                if connection_str not in connection_bends.keys():
+                    bends = True if random.random() > .7 else False
+                    connection_bends[connection_str] = bends
+                    connection_bends[connection_str_2] = bends
             current_location = stations[closest_station]
         current_location = middle_location
-        line.insert(0, "X")
+        # line.insert(0, "X")
         while True:
             closest_station = get_closest_station(current_location, stations, line, map_width, map_height, vector, True)
             if closest_station == -1:
                 break
             line.insert(0, closest_station)
+            if len(line) > 2:
+                prev_station = line[1]
+                connection_str = f"{prev_station},{closest_station}"
+                connection_str_2 = f"{closest_station},{prev_station}"
+                if connection_str not in connection_bends.keys():
+                    bends = True if random.random() > .7 else False
+                    connection_bends[connection_str] = bends
+                    connection_bends[connection_str_2] = bends
             current_location = stations[closest_station]
         lines.append({"start": middle_location, "line": line})
-    return lines
+    return {'lines': lines, 'connection_bends': connection_bends}
 
 
 def generate_vector():
@@ -128,3 +146,13 @@ def print_vector(vector):
         print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
         print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
         print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
+
+# def get_destinations(location, vector, map_width, map_height):
+#     x = location['x']
+#     y = location['y']
+#     m = vector['y_vec'] / vector['x_vec']
+#     b = y - (m * x)
+#     y_intercept = b
+#     x_intercept = (0 - b) / m
+#     y_end_intercept = (m * map_width) + b
+#     x_end_intercept = (map_height - b) / m
