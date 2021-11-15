@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from matplotlib import pyplot
 
 from src.consts.metro_consts import (
@@ -82,4 +84,6 @@ class PyMetro:
                 line_y.append(station_info['y']+(offset*count))
             count += 1
             pyplot.plot(line_x, line_y)
-        pyplot.show()
+        # pyplot.show()
+        now = datetime.now()
+        pyplot.savefig(f'out/{now.strftime("%m.%d.%Y-%H:%M:%S.jpg")}')
