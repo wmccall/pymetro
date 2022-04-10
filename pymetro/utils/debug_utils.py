@@ -1,4 +1,4 @@
-from src.consts.metro_consts import (
+from pymetro.consts.metro_consts import (
     TOP_LEFT_CORNER,
     TOP_RIGHT_CORNER,
     BOTTOM_LEFT_CORNER,

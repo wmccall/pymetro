@@ -1,12 +1,14 @@
 from datetime import datetime
 
 from matplotlib import pyplot
+import numpy as np
 
-from src.consts.metro_consts import (
+from pymetro.consts.metro_consts import (
     DEFAULT_MAP_WIDTH,
     DEFAULT_MAP_HEIGHT,
     DEFAULT_NUM_STATIONS,
     DEFAULT_NUM_LINES,
+    DEFAULT_NUM_HUBS,
     TOP_LEFT_CORNER,
     TOP_RIGHT_CORNER,
     BOTTOM_LEFT_CORNER,
@@ -14,7 +16,7 @@ from src.consts.metro_consts import (
     VERTICAL_PIPE,
     HORIZONTAL_PIPE,
 )
-from src.utils.metro_utils import (
+from pymetro.utils.metro_utils import (
     generate_stations,
     generate_lines,
 )
@@ -24,17 +26,20 @@ class PyMetro:
                  map_width=DEFAULT_MAP_WIDTH,
                  map_height=DEFAULT_MAP_HEIGHT,
                  num_stations=DEFAULT_NUM_STATIONS,
-                 num_lines=DEFAULT_NUM_LINES):
+                 num_lines=DEFAULT_NUM_LINES,
+                 num_hubs=DEFAULT_NUM_HUBS):
         self.map_width = map_width
         self.map_height = map_height
         self.num_stations = num_stations
         self.num_lines = num_lines
+        self.num_hubs = num_hubs
     
     def details(self):
         print(f"Map Width: {self.map_width}")
         print(f"Map Height: {self.map_height}")
         print(f"Number of Stations: {self.num_stations}")
         print(f"Number of Train Lines: {self.num_lines}")
+        print(f"Number of Hubs: {self.num_hubs}")
 
     def generate(self):
         self.stations = generate_stations(self.map_width, self.map_height, self.num_stations)
@@ -66,9 +71,11 @@ class PyMetro:
         stations_y = []
         station_num = 0
         for station in self.stations:
-            if station_num in self.tracks_info['touched_stations']:
-                stations_x.append(station['x'])
-                stations_y.append(station['y'])
+            # if station_num in self.tracks_info['touched_stations']:
+            #     stations_x.append(station['x'])
+            #     stations_y.append(station['y'])
+            stations_x.append(station['x'])
+            stations_y.append(station['y'])
             station_num += 1
         colors = [[0,0,0]]
         pyplot.scatter(stations_x, stations_y, c=colors, s=30)
@@ -78,12 +85,15 @@ class PyMetro:
             print(line_info)
             line_x = []
             line_y = []
-            for station_num in line_info['line']:
-                station_info = self.stations[station_num]
-                line_x.append(station_info['x']+(offset*count))
-                line_y.append(station_info['y']+(offset*count))
+            for station in line_info['line']:
+                # station_info = self.stations[station_num]
+                line_x.append(station['x']+(offset*count))
+                line_y.append(station['y']+(offset*count))
             count += 1
             pyplot.plot(line_x, line_y)
+            x = np.linspace(0, self.map_width, 100)
+            y = line_info['slope']*x+line_info['y_intercept']
+            pyplot.plot(x,y)
         # pyplot.show()
         now = datetime.now()
         pyplot.savefig(f'out/{now.strftime("%m.%d.%Y-%H:%M:%S.jpg")}')
