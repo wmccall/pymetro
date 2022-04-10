@@ -17,12 +17,18 @@ def generate_stations(map_width, map_height, num_stations):
     return stations
 
 
-def generate_lines(map_width, map_height, stations, num_lines):
+def generate_lines(map_width, map_height, stations, num_lines, num_hubs):
     lines = []
     touched_stations = []
-    for _ in range(num_lines):
+    root_stations = []
+    for _ in range(num_hubs):
         root_station_num = int(random.random() * len(stations))
-        root_station = stations[root_station_num]
+        while stations[root_station_num] in root_stations:
+            root_station_num = int(random.random() * len(stations))
+        root_stations.append(stations[root_station_num])
+    for _ in range(num_lines):
+        root_station_num = int(random.random() * len(root_stations))
+        root_station = root_stations[root_station_num]
         max_allowed_dist_from_line = math.sqrt(map_width**2 + map_height**2)/30
         vector = generate_vector()
         fitting_stations = find_fitting_stations(stations, root_station, max_allowed_dist_from_line, vector)

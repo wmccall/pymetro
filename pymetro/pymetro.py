@@ -43,7 +43,7 @@ class PyMetro:
 
     def generate(self):
         self.stations = generate_stations(self.map_width, self.map_height, self.num_stations)
-        self.tracks_info = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines)
+        self.tracks_info = generate_lines(self.map_width, self.map_height, self.stations, self.num_lines, self.num_hubs)
 
     def ascii_map(self):
         map = [[" " for col_num in range(self.map_width)] for row_num in range(self.map_height)]
