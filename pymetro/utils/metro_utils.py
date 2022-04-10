@@ -38,6 +38,8 @@ def generate_vector():
 def find_fitting_stations(stations, root_station, max_allowed_dist_from_line, vector):
     y_intercept = calculate_y_intercept(root_station, vector)
     vector_degree = math.atan(vector['y_vec']/vector['x_vec'])
+    print(math.degrees(vector_degree))
+    correction_degree = math.radians(-1 * math.degrees(vector_degree))
     fitting_stations = []
     for station in stations:
         dist_from_line = calculate_dist_from_line(station, vector, y_intercept)
@@ -45,7 +47,7 @@ def find_fitting_stations(stations, root_station, max_allowed_dist_from_line, ve
         if dist_from_line <= max_allowed_dist_from_line:
             fitting_stations.append(station)
     print(f'fit: {fitting_stations}\n############################################')
-    sorted_stations = sorted(fitting_stations, key=lambda station: station['x']*math.cos(vector_degree) - station['y']*math.sin(vector_degree))
+    sorted_stations = sorted(fitting_stations, key=lambda station: station['x']*math.cos(correction_degree) - station['y']*math.sin(correction_degree))
     print(f'sort: {sorted_stations}\n++++++++++++++++++++++++++++++++++++++++++++')
     fitting_stations = sorted(fitting_stations, key=lambda station: station['x'])
     return [sorted_stations, fitting_stations]

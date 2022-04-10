@@ -91,9 +91,9 @@ class PyMetro:
                 line_y.append(station['y']+(offset*count))
             count += 1
             pyplot.plot(line_x, line_y)
-            x = np.linspace(0, self.map_width, 100)
-            y = line_info['slope']*x+line_info['y_intercept']
-            pyplot.plot(x,y)
+            # x = np.linspace(0, self.map_width, 100)
+            # y = line_info['slope']*x+line_info['y_intercept']
+            # pyplot.plot(x,y)
         # pyplot.show()
         now = datetime.now()
         pyplot.savefig(f'out/{now.strftime("%m.%d.%Y-%H:%M:%S.jpg")}')
