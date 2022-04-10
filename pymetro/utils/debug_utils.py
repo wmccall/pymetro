@@ -41,6 +41,27 @@ def print_vector(vector):
         print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
         print(f"{VERTICAL_PIPE}  {VERTICAL_PIPE}  {VERTICAL_PIPE}")
         print(f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}")
+    
+def ascii_map(pymetro):
+    map = [[" " for col_num in range(pymetro.map_width)] for row_num in range(pymetro.map_height)]
+    station_num = 0
+    print(pymetro.stations)
+    print(pymetro.tracks_info)
+    for station in pymetro.stations:
+        map[station['y']][station['x']] = f"{station_num}"
+        station_num += 1
+
+    map.reverse()
+
+    horizontal_lines = HORIZONTAL_PIPE.join([HORIZONTAL_PIPE for _ in range(pymetro.map_width+1)])
+
+    top_border = f"{TOP_LEFT_CORNER}{horizontal_lines}{TOP_RIGHT_CORNER}"
+    print(top_border)
+    for row in map:
+        slice = f"{VERTICAL_PIPE} {' '.join(row)} {VERTICAL_PIPE}"
+        print(slice)
+    bottom_border = f"{BOTTOM_LEFT_CORNER}{horizontal_lines}{BOTTOM_RIGHT_CORNER}"
+    print(bottom_border)
 
 def print_current_info(vector, is_inverse, current_location, desired_location):
     print("######## Closest Station #########")
