@@ -5,6 +5,7 @@ from parameterized import parameterized
 from pymetro.utils.metro_utils import (
     calculate_y_intercept,
     calculate_dist_from_line,
+    calculate_angle_from_3_stations,
 )
 
 class TestMetroUtils(unittest.TestCase):
@@ -27,3 +28,13 @@ class TestMetroUtils(unittest.TestCase):
     def test_calculate_dist_from_line(self, station, root_station, vector, expected):
         y_intercept = calculate_y_intercept(root_station, vector)
         self.assertEqual(expected, round(calculate_dist_from_line(station, vector, y_intercept), 3))
+
+    @parameterized.expand([
+        [{'x': 1, 'y': 1}, {'x': 0, 'y': 0}, {'x': 1, 'y': 0}, 45],
+        [{'x': -1, 'y': 1}, {'x': 0, 'y': 0}, {'x': 1, 'y': 0}, 135],
+        [{'x': 0, 'y': 1}, {'x': 0, 'y': 0}, {'x': 1, 'y': 0}, 90],
+        [{'x': 4, 'y': 5}, {'x': 6, 'y': 8}, {'x': 0, 'y': 10}, 74.745],
+    ])
+    def test_calculate_angle_from_3_stations(self, station1, station2, station3, expected):
+        angle = round(calculate_angle_from_3_stations(station1, station2, station3), 3)
+        self.assertEqual(expected, angle)

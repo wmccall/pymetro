@@ -30,6 +30,7 @@ def generate_lines(map_width, map_height, stations, num_lines, num_hubs):
 
         fitting_stations = find_fitting_stations(stations, root_station, max_allowed_dist_from_line, vector)
         lines.append({"start": root_station, "line": fitting_stations})
+        calculate_angle_from_3_stations(fitting_stations[0], fitting_stations[1], fitting_stations[3])
 
         touched_stations = (*touched_stations, *fitting_stations)
 
@@ -73,6 +74,15 @@ def calculate_dist_from_line(station, vector, y_intercept):
     b = vector['x_vec']
     c = -1 * y_intercept * b
     return round(abs(a * x + b * y + c) / math.sqrt(a**2 + b**2), 5)
+
+
+def calculate_angle_from_3_stations(s1, s2, s3):
+    s1_s2_vector = (s1['y']-s2['y']),(s1['x']-s2['x'])
+    s2_s3_vector = (s2['y']-s3['y']),(s2['x']-s3['x'])
+    dot_prod = s1_s2_vector[0]*s2_s3_vector[0] + s1_s2_vector[1]*s2_s3_vector[1]
+    s1_s2_dist = calculate_distance(s1, s2)
+    s2_s3_dist = calculate_distance(s2, s3)
+    return 180 - math.degrees(math.acos(dot_prod/(s1_s2_dist*s2_s3_dist)))
 
 
 def generate_random_location(map_width, map_height):
