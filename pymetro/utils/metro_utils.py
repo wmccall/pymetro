@@ -29,10 +29,24 @@ def generate_lines(map_width, map_height, stations, num_lines, num_hubs):
         vector = generate_vector()
 
         fitting_stations = find_fitting_stations(stations, root_station, max_allowed_dist_from_line, vector)
-        lines.append({"start": root_station, "line": fitting_stations})
-        calculate_angle_from_3_stations(fitting_stations[0], fitting_stations[1], fitting_stations[3])
 
-        touched_stations = (*touched_stations, *fitting_stations)
+        if len(fitting_stations) >= 3:
+            cleaned_stations = []
+            a = fitting_stations[0]
+            b = fitting_stations[1]
+            for station in fitting_stations[2:]:
+                angle = calculate_angle_from_3_stations(a,b,station)
+                if angle > 105:
+                    cleaned_stations.append(a)
+                    a = b   
+                b = station
+            cleaned_stations.append(a)
+            cleaned_stations.append(b)
+
+        lines.append({"start": root_station, "line": cleaned_stations})
+        # calculate_angle_from_3_stations(fitting_stations[0], fitting_stations[1], fitting_stations[3])
+
+        touched_stations = (*touched_stations, *cleaned_stations)
 
     return {'lines': lines, 'touched_stations': touched_stations}
 
